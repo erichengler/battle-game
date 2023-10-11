@@ -1,18 +1,30 @@
-import { PlayerSummary } from 'components/PlayerSummary';
-import styles from './styles.module.css';
-import { useState } from 'react';
+import { BattleMenu, BattleAnnouncer, PlayerSummary } from 'components';
+import { useAIOpponent, useBattleSequence } from 'hooks';
 import { opponentStats, playerStats } from 'shared';
-import { BattleMenu } from 'components/BattleMenu';
-import { BattleAnnouncer } from 'components/BattleAnnouncer';
+import styles from './styles.module.css';
+import { useEffect, useState } from 'react';
 
 export const Battle = () => {
-    const [opponentHealth, setOpponentHealth] = useState(
-        opponentStats.maxHealth,
-    );
-    const [playerHealth, setPlayerHealth] = useState(
-        playerStats.maxHealth,
-    );
-    const [announcerMessage, setAnnouncerMessage] = useState('');
+    const [sequence, setSequence] = useState({});
+
+    const {
+        turn,
+        inSequence,
+        playerHealth,
+        opponentHealth,
+        announcerMessage,
+        playerAnimation,
+        opponentAnimation,
+    } = useBattleSequence(sequence);
+
+    const aiChoice = useAIOpponent(turn);
+
+    // Setting sequence when aiChoice happens
+    useEffect(() => {
+        if (aiChoice && turn === 1 && !inSequence) {
+            setSequence({ turn, mode: aiChoice });
+        }
+    }, [turn, aiChoice, inSequence]);
 
     return (
         <>
@@ -39,7 +51,7 @@ export const Battle = () => {
                         <img
                             alt={playerStats.name}
                             src={playerStats.img}
-                            // className={styles.}
+                            className={styles[playerAnimation]}
                         />
                     </div>
 
@@ -47,7 +59,7 @@ export const Battle = () => {
                         <img
                             alt={opponentStats.name}
                             src={opponentStats.img}
-                            // className={styles.}
+                            className={styles[opponentAnimation]}
                         />
                     </div>
                 </div>
@@ -77,9 +89,15 @@ export const Battle = () => {
 
                     <div className={styles.hudChild}>
                         <BattleMenu
-                            onAttack={() => console.log('Attack!')}
-                            onMagic={() => console.log('Magic!')}
-                            onHeal={() => console.log('Heal!')}
+                            onAttack={() =>
+                                setSequence({ turn, mode: 'attack' })
+                            }
+                            onMagic={() =>
+                                setSequence({ turn, mode: 'magic' })
+                            }
+                            onHeal={() =>
+                                setSequence({ turn, mode: 'heal' })
+                            }
                         />
                     </div>
                 </div>
