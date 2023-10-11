@@ -16,10 +16,10 @@
 
 .option {
     display: flex;
-    border-radius: 5px;
-    border: 1px solid black;
+    border-radius: 7px;
+    border: 1px solid rgb(50, 50, 50);
 
-    background-color: #821400;
+    background-color: #b24411;
 
     align-items: center;
     justify-content: center;
@@ -30,5 +30,5 @@
 }
 
 .option:hover {
-    background-color: #fd9401;
+    background-color: #f19008;
 }
