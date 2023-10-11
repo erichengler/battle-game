@@ -2,6 +2,7 @@ import { PlayerSummary } from 'components/PlayerSummary';
 import styles from './styles.module.css';
 import { useState } from 'react';
 import { opponentStats, playerStats } from 'shared/characters';
+import { BattleMenu } from 'components/BattleMenu';
 
 export const Battle = () => {
     const [opponentHealth, setOpponentHealth] = useState(
@@ -36,6 +37,14 @@ export const Battle = () => {
                         maxHealth={playerStats.maxHealth}
                     />
                 </div>
+            </div>
+
+            <div className={styles.hudChild}>
+                <BattleMenu
+                    onAttack={() => console.log('Attack!')}
+                    onMagic={() => console.log('Magic!')}
+                    onHeal={() => console.log('Heal!')}
+                />
             </div>
         </div>
     );
